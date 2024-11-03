@@ -23,6 +23,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="BaldiTexturePacks">
+      <HintPath>..\Dependencies\BaldiTexturePacks.dll</HintPath>
+    </Reference>
     <Reference Include="BepInEx">
       <HintPath>..\Dependencies\BepInEx.dll</HintPath>
     </Reference>

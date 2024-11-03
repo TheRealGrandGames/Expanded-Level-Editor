@@ -1,5 +1,6 @@
 ﻿using BaldiLevelEditor.Types;
 using BaldiLevelEditor.UI;
+using BaldiTexturePacks;
 using BepInEx;
 using HarmonyLib;
 using MTM101BaldAPI;
@@ -23,6 +24,37 @@ using UnityEngine.UI;
 
 namespace BaldiLevelEditor
 {
+    [BepInDependency("mtm101.rulerp.baldiplus.texturepacks", BepInDependency.DependencyFlags.SoftDependency)]
+    [ConditionalPatchMod("mtm101.rulerp.baldiplus.texturepacks")]
+    [HarmonyPatch(typeof(TexturePack))]
+    internal class TexturePackFixer
+    {
+        [HarmonyPatch("Apply")]
+        [HarmonyPrefix]
+        private static void RemoveNullValues(TexturePack __instance)
+        {
+
+            Dictionary<AudioClip, AudioClip> temp = new Dictionary<AudioClip, AudioClip>(__instance.clipsToReplace);
+            __instance.clipsToReplace.Clear();
+            foreach (KeyValuePair<AudioClip, AudioClip> item in temp)
+            {
+                if (!__instance.clipsToReplace.ContainsKey(item.Key) && item.Key != null && item.Value != null)
+                {
+                    __instance.clipsToReplace.Add(item.Key, item.Value);
+                }
+            }
+            Dictionary<SoundObject, AudioClip> temp2 = new Dictionary<SoundObject, AudioClip>(TPPlugin.Instance.originalSoundClips);
+            TPPlugin.Instance.originalSoundClips.Clear();
+            foreach (KeyValuePair<SoundObject, AudioClip> item in temp2)
+            {
+                if (!TPPlugin.Instance.originalSoundClips.ContainsKey(item.Key) && item.Key != null && item.Value != null)
+                {
+                    TPPlugin.Instance.originalSoundClips.Add(item.Key, item.Value);
+                }
+            }
+        }
+    }
+
     public class EditorPrebuiltStucture
     {
         public List<PrefabLocation> prefabs = new List<PrefabLocation>();
