@@ -24,7 +24,6 @@ using UnityEngine.UI;
 
 namespace BaldiLevelEditor
 {
-    [BepInDependency("mtm101.rulerp.baldiplus.texturepacks", BepInDependency.DependencyFlags.SoftDependency)]
     [ConditionalPatchMod("mtm101.rulerp.baldiplus.texturepacks")]
     [HarmonyPatch(typeof(TexturePack))]
     internal class TexturePackFixer
@@ -67,6 +66,7 @@ namespace BaldiLevelEditor
     }
 
     [BepInPlugin("mtm101.rulerp.baldiplus.leveleditor", "Baldi's Basics Plus Level Editor", "0.1.0.0")]
+    [BepInDependency("mtm101.rulerp.baldiplus.texturepacks", BepInDependency.DependencyFlags.SoftDependency)]
     public class BaldiLevelEditorPlugin : BaseUnityPlugin
     {
 
