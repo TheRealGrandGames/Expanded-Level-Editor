@@ -135,15 +135,15 @@ namespace PlusLevelLoader
             textureAliases.Add("ElevatorCeiling", assetMan.Get<Texture2D>("ElCeiling"));
             textureAliases.Add("Grass", assetMan.Get<Texture2D>("Grass"));
             textureAliases.Add("Fence", assetMan.Get<Texture2D>("fence"));
-            //textureAliases.Add("TreeLine", assetMan.Get<Texture2D>("fence"));
+            //textureAliases.Add("TreeLineWall", assetMan.Get<Texture2D>("Treeline_Wall"));
             textureAliases.Add("JohnnyWall", assetMan.Get<Texture2D>("JohnnyWall"));
             textureAliases.Add("None", assetMan.Get<Texture2D>("Transparent"));
 
             textureAliases.Add("SaloonWallEditor", assetMan.Get<Texture2D>("SaloonWall"));
 
-            /*textureAliases.Add("PlaceholderFloorEditor", assetMan.Get<Texture2D>("MM_Front_Default"));
-            textureAliases.Add("PlaceholderWallEditor", assetMan.Get<Texture2D>("MM_Front_Default"));
-            textureAliases.Add("PlaceholderCeilingEditor", assetMan.Get<Texture2D>("MM_Front_Default"));*/
+            textureAliases.Add("PlaceholderFloorEditor", assetMan.Get<Texture2D>("Placeholder_Floor"));
+            textureAliases.Add("PlaceholderWallEditor", assetMan.Get<Texture2D>("Placeholder_Wall_W"));
+            textureAliases.Add("PlaceholderCeilingEditor", assetMan.Get<Texture2D>("Placeholder_Celing"));
 
             //PlusLevelEditor.level.Add("break", new TextureContainer("Actual", "FacultyWall", "Ceiling"));
 
@@ -168,14 +168,14 @@ namespace PlusLevelLoader
             roomSettings.Add("outside", new RoomSettings(RoomCategory.Special, RoomType.Room, new Color(0f, 1f, 1f), assetMan.Get<StandardDoorMats>("ClassDoorSet")));
             //roomSettings.Add("outside_camphub", new RoomSettings(RoomCategory.Special, RoomType.Room, new Color(0f, 1f, 1f), assetMan.Get<StandardDoorMats>("ClassDoorSet")));
             roomSettings.Add("shop", new RoomSettings(RoomCategory.Store, RoomType.Room, new Color(1f, 1f, 1f), assetMan.Get<StandardDoorMats>("ClassDoorSet")));
-            //roomSettings.Add("placeholder", new RoomSettings(RoomCategory.Special, RoomType.Room, new Color(0f, 0f, 0f), assetMan.Get<StandardDoorMats>("DefaultDoorSet")));
+            roomSettings.Add("nullplaceholder", new RoomSettings(RoomCategory.Special, RoomType.Room, new Color(0f, 0f, 0f), assetMan.Get<StandardDoorMats>("DefaultDoorSet")));
             roomSettings["faculty"].container = roomFunctions.Find(x => x.name == "FacultyRoomFunction");
             roomSettings["office"].container = roomFunctions.Find(x => x.name == "OfficeRoomFunction");
             roomSettings["class"].container = roomFunctions.Find(x => x.name == "ClassRoomFunction");
             roomSettings["library"].container = roomFunctions.Find(x => x.name == "LibraryRoomFunction");
             roomSettings["cafeteria"].container = roomFunctions.Find(x => x.name == "CafeteriaRoomFunction");
             roomSettings["outside"].container = roomFunctions.Find(x => x.name == "PlaygroundRoomFunction");
-            //roomSettings["outside_camphub"].container = roomFunctions.Find(x => x.name == "PlaygroundRoomFunction"); //Was CampHubRoomFunction
+            //roomSettings["outside_camphub"].container = roomFunctions.Find(x => x.name == "CampHubRoomFunction"); //Was CampHubRoomFunction
 
             shopContainer = new GameObject().AddComponent<RoomFunctionContainer>();
             shopContainer.name = "EditorStoreRoomFunction";

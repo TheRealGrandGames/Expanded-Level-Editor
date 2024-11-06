@@ -201,7 +201,7 @@ namespace BaldiLevelEditor
 
         public List<ToolCategory> toolCats = new List<ToolCategory>()
         {
-            new ToolCategory("halls", GetUISprite("Floor"),
+            new ToolCategory("halls", GetUISprite("cat_floors"),
             new FloorTool("hall"),
             //new FloorTool("hall_carpet"),
             //new FloorTool("hall_tiles"),
@@ -217,10 +217,10 @@ namespace BaldiLevelEditor
             new FloorTool("shop"),
             new FloorTool("library"),
             new FloorTool("cafeteria"),
-            new FloorTool("outside")
-            //new FloorTool("outside_camphub")
-            /*new FloorTool("placeholder")*/),
-            new ToolCategory("doors", GetUISprite("DoorED"),
+            new FloorTool("outside"),
+            //new FloorTool("outside_camphub"),
+            new FloorTool("nullplaceholder")),
+            new ToolCategory("doors", GetUISprite("cat_doors"),
             new DoorTool("standard"),
             new SwingingDoorTool("swing"),
             new SwingingDoorTool("swingsilent"),
@@ -231,16 +231,7 @@ namespace BaldiLevelEditor
             new WallTool(true),
             new WallTool(false)),
 
-            new ToolCategory("objects", GetUISprite("Object_desk"),
-            new RotateAndPlacePrefab("pricetag"),
-            /*new PrebuiltStructureTool("pricetagoncounter", new EditorPrebuiltStucture(
-                new PrefabLocation("counter", new UnityVector3(0f,-3.75f,0f)),
-                new PrefabLocation("pricetag", new UnityVector3(0f,0f,0f)))),*/
-            new RotateAndPlacePrefab("pricetagmap"),
-            new RotateAndPlacePrefab("pricetagout"),
-            new RotateAndPlacePrefab("pricetagrestocking"),
-            new RotateAndPlacePrefab("cashregister"),
-            new ObjectTool("johnnysign"),
+            new ToolCategory("objects", GetUISprite("cat_decor"),
             new RotateAndPlacePrefab("waterfountain"),
             new RotateAndPlacePrefab("dietbsodamachine"),
             new RotateAndPlacePrefab("bsodamachine"),
@@ -308,6 +299,15 @@ namespace BaldiLevelEditor
             new RotateAndPlacePrefab("bookshelf"),
             new RotateAndPlacePrefab("bookshelf_hole"),
             new RotateAndPlacePrefab("rounddesk"),
+            new RotateAndPlacePrefab("pricetag"),
+            /*new PrebuiltStructureTool("pricetagoncounter", new EditorPrebuiltStucture(
+                new PrefabLocation("counter", new UnityVector3(0f,-3.75f,0f)),
+                new PrefabLocation("pricetag", new UnityVector3(0f,0f,0f)))),*/
+            new RotateAndPlacePrefab("pricetagmap"),
+            new RotateAndPlacePrefab("pricetagout"),
+            new RotateAndPlacePrefab("pricetagrestocking"),
+            new RotateAndPlacePrefab("cashregister"),
+            new ObjectTool("johnnysign"),
             new RotateAndPlacePrefab("counter"),
             new RotateAndPlacePrefab("examination"),
             new ObjectTool("merrygoround"),
@@ -335,14 +335,14 @@ namespace BaldiLevelEditor
             new ObjectTool("fluorescentlight"),
             new ObjectTool("hanginglight"),
             new ObjectTool("decor_exitsign")),
-            new ToolCategory("activities", GetUISprite("Activity_notebook"),
+            new ToolCategory("activities", GetUISprite("cat_activities"),
             new ActivityTool("notebook"),
             /*new PrebuiltStructureTool("notebookondesk", new EditorPrebuiltStucture(
                 new PrefabLocation("bigdesk", new UnityVector3(0f,0f,0f)),
                 new PrefabLocation("notebook", new UnityVector3(0f,5f,0f)))),*/
             new ActivityTool("mathmachine"),
             new ActivityTool("mathmachine_corner")),
-            new ToolCategory("characters", GetUISprite("NPC_baldi"),
+            new ToolCategory("characters", GetUISprite("cat_npcs"),
             new NpcTool("baldi"),
             new NpcTool("principal"),
             new NpcTool("sweep"),
@@ -383,7 +383,7 @@ namespace BaldiLevelEditor
             new ItemTool("points25"),
             new ItemTool("points50"),
             new ItemTool("points100")),
-            new ToolCategory("connectables", GetUISprite("Button_button"),
+            new ToolCategory("connectables", GetUISprite("cat_connectables"),
             new ButtonTool("button"),
             new TileBasedTool("lockdowndoor"),
             new RotateAndPlacePrefab("conveyorbelt"),
@@ -483,7 +483,7 @@ namespace BaldiLevelEditor
             new RotateAndPlacePrefab("poster_kick6"),
             new RotateAndPlacePrefab("poster_kick7"),
             new RotateAndPlacePrefab("poster_kick8")),
-            new ToolCategory("utilities", GetUISprite("Gear"),
+            new ToolCategory("utilities", GetUISprite("cat_utilities"),
             new ElevatorTool(true),
             new ElevatorTool(false),
             new ConnectTool(),

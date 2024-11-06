@@ -110,9 +110,9 @@ namespace BaldiLevelEditor
             defaultTextures.Add("library", new TextureContainer("BlueCarpet", "FacultyWall", "Ceiling"));
             defaultTextures.Add("cafeteria", new TextureContainer("HallFloor", "Wall", "Ceiling"));
             defaultTextures.Add("outside", new TextureContainer("Grass", "Fence", "None"));
-            //defaultTextures.Add("outside_camphub", new TextureContainer("Grass", "TreeLine_Sunset", "None"));
+            //defaultTextures.Add("outside_camphub", new TextureContainer("Grass", "TreeLineWall", "None"));
             defaultTextures.Add("shop", new TextureContainer("HallFloor", "JohnnyWall", "Ceiling"));
-            //defaultTextures.Add("placeholder", new TextureContainer("PlaceholderFloorEditor", "PlaceholderWallEditor", "PlaceholderCeilingEditor"));
+            defaultTextures.Add("nullplaceholder", new TextureContainer("PlaceholderFloorEditor", "PlaceholderWallEditor", "PlaceholderCeilingEditor"));
         }
 
         public static EditorLevel LoadFromStream(BinaryReader reader)
