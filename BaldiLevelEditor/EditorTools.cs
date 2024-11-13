@@ -865,7 +865,7 @@ namespace BaldiLevelEditor
             areas = new TiledArea[2];
         }
     }
-
+    
     public class TileBasedTool : PlaceAndRotateToolBase
     {
         public override Sprite editorSprite => BaldiLevelEditorPlugin.Instance.assetMan.Get<Sprite>("UI/Tile_" + _tile);

@@ -387,6 +387,7 @@ namespace BaldiLevelEditor
             new ButtonTool("button"),
             new TileBasedTool("lockdowndoor"),
             new RotateAndPlacePrefab("conveyorbelt"),
+            new RotateAndPlacePrefab("shrinkmachine"),
 
             new ObjectTool("randomevent_fog"),
             new ObjectTool("randomevent_flood"),
@@ -676,6 +677,26 @@ namespace BaldiLevelEditor
                 SceneManager.LoadScene("MainMenu");
                 Destroy(GameObject.Find("Main Camera(Clone)"));
             }, false);
+            /*CreateGearButton(GetUISprite("SavePlayButton"), GetUISprite("SavePlayButtonHover"), new Vector2(-10f, 10f), () =>
+            {
+                if (level.areas.Count == 0)
+                {
+                    return;
+                }
+                CreateDirectoryIfNoExist();
+                SaveLevelAsEditor(Path.Combine(Application.persistentDataPath, "CustomLevels", "level.bld")); // placeholder path
+                CompileLevelAsPlayable(Path.Combine(Application.persistentDataPath, "CustomLevels", "level.cbld"));
+            }, true, () =>
+            {
+                if (level.areas.Count == 0)
+                {
+                    audMan.PlaySingle(BaldiLevelEditorPlugin.Instance.assetMan.Get<SoundObject>("Elv_Buzz"));
+                    return;
+                }
+            });*/
+
+            //TooltipTextYay(new Vector2(100f, 50f));
+
             InitializeMenuBackground();
             UpdateCursor();
             UpdateCursor();
@@ -702,6 +723,18 @@ namespace BaldiLevelEditor
             yield break;
         }
 
+        public TextMeshProUGUI editorTooltipText;
+
+        void TooltipTextYay(Vector3 position)
+        {
+            editorTooltipText = UIHelpers.CreateText<TextMeshProUGUI>(BaldiFonts.ComicSans12, "", gearAnimator.transform, position, false);
+        }
+
+        void UpdateTooltipTextYay(string text)
+        {
+            editorTooltipText.text = text;
+        }
+
         void CreateGearButton(Sprite sprite, Sprite highlightSprite, Vector2 position, Action toDo, bool thread, Action? postThread = null)
         {
             Image but = UIHelpers.CreateImage(sprite, gearAnimator.transform, Vector3.zero, false);
@@ -720,6 +753,11 @@ namespace BaldiLevelEditor
                     if (updateDelay > 0f) return;
                     CursorController.Instance.DisableClick(true);
                     StartCoroutine(RunThreadAndSpinGear(toDo, postThread));
+                });
+
+                stanMen.OnHighlight.AddListener(() =>
+                {
+                    UpdateTooltipTextYay("EPOOPE");
                 });
 
                 /*stanMen.OnHighlight.AddListener(() =>
@@ -811,7 +849,20 @@ namespace BaldiLevelEditor
             Image slot = UIHelpers.CreateImage(GetUISprite("SlotStandard"), parent, new Vector2(0f,0f), false);
             slot.transform.SetParent(parent, false);
             slot.name = "Tool Slot (" + tool.GetType().Name + ")";
-            Image icon = UIHelpers.CreateImage(tool.editorSprite, slot.transform, new Vector2(0f, 0f), false);
+            Sprite targetSprite = null;
+            try
+            {
+                targetSprite = tool.editorSprite;
+            }
+            catch (Exception E)
+            {
+                UnityEngine.Debug.LogException(E);
+            }
+            if (targetSprite == null)
+            {
+                targetSprite = BaldiLevelEditorPlugin.Instance.assetMan.Get<Sprite>("UI/icon_unknown");
+            }
+            Image icon = UIHelpers.CreateImage(targetSprite, slot.transform, new Vector2(0f, 0f), false);
             slot.transform.SetParent(slot.transform, false);
             icon.name = "Icon";
             StandardMenuButton button = icon.gameObject.ConvertToButton<StandardMenuButton>(true);

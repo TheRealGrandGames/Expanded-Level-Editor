@@ -34,22 +34,6 @@ namespace BaldiLevelEditor.Patches
             {
                 BaldiLevelEditorPlugin.Instance.StartCoroutine(BaldiLevelEditorPlugin.Instance.GoToGame());
             });
-
-            /*Image image2 = UIHelpers.CreateImage(BaldiLevelEditorPlugin.Instance.assetMan.Get<Sprite>("EditorButton"), __instance.transform, Vector3.zero, false, 1f);
-            image2.rectTransform.anchorMin = new Vector2(0.5f, 0.5f);
-            image2.rectTransform.anchorMax = new Vector2(0.5f, 0.5f);
-            image2.rectTransform.anchoredPosition = new Vector2(60, -88);
-            CursorController.Instance.transform.SetAsLastSibling();
-            __instance.transform.Find("Bottom").SetAsLastSibling();
-            __instance.transform.Find("BlackCover").SetAsLastSibling();
-            StandardMenuButton button2 = image.gameObject.ConvertToButton<StandardMenuButton>();
-            button2.highlightedSprite = BaldiLevelEditorPlugin.Instance.assetMan.Get<Sprite>("EditorButtonGlow");
-            button2.unhighlightedSprite = BaldiLevelEditorPlugin.Instance.assetMan.Get<Sprite>("EditorButton");
-            button2.swapOnHigh = true;
-            button2.OnPress.AddListener(() =>
-            {
-                BaldiLevelEditorPlugin.Instance.StartCoroutine(BaldiLevelEditorPlugin.Instance.GoToGame());
-            });*/
         }
     }
 }

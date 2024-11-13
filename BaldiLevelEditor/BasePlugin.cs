@@ -120,7 +120,10 @@ namespace BaldiLevelEditor
             bool active = reference.activeSelf;
             reference.SetActive(false);
             GameObject obj = GameObject.Instantiate(reference);
-            obj.GetComponentsInChildren<MonoBehaviour>().Do(x => Destroy(x));
+            obj.GetComponentsInChildren<MonoBehaviour>().Do(x => {
+                if (x is BillboardUpdater) return;
+                Destroy(x);
+            });
             if (stripColliders)
             {
                 obj.GetComponentsInChildren<Collider>().Do(x => Destroy(x));
@@ -192,6 +195,7 @@ namespace BaldiLevelEditor
             dummyObject.SetActive(false);
             PlusLevelEditor editor = dummyObject.AddComponent<PlusLevelEditor>();
             editor.ReflectionSetVariable("destroyOnLoad", true);
+            editor.gameObject.AddComponent<BillboardManager>();
             dummyObject.SetActive(true);
             editor.gameObject.name = "Level Editor";
             editor.cursorBounds = cursorInit.screenSize;
@@ -545,6 +549,8 @@ namespace BaldiLevelEditor
             editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("balloon_orange", objects.Where(x => x.name == "Balloon_Orange").Where(x => x.transform.parent == null).First(), Vector3.up * 5f));
             editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("balloon_purple", objects.Where(x => x.name == "Balloon_Purple").Where(x => x.transform.parent == null).First(), Vector3.up * 5f));
 
+            editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("shrinkmachine", objects.Where(x => x.name == "ShrinkMachine").Where(x => x.transform.parent == null).First(), Vector3.zero));
+            
             //TiledEditorConnectable conveyorVisual = CreateTileVisualFromObject<TiledEditorConnectable, TiledPrefab>(objects.Where(x => x.name == "BeltManager").First());
             //conveyorVisual.positionOffset = Vector3.up * 21f;
             //conveyorVisual.directionAddition = 4f;
@@ -887,7 +893,7 @@ namespace BaldiLevelEditor
             assetMan.Add<Sprite>("EditorButtonGlow", AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromMod(this, "EditorButton_Glow.png"), 1f));
             assetMan.Add<Sprite>("EditorButtonFail", AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromMod(this, "EditorButtonFail.png"), 1f));
             assetMan.Add<Sprite>("LinkSprite", AssetLoader.SpriteFromTexture2D(AssetLoader.TextureFromMod(this, "LinkSprite.png"), 40f));
-            doorTypes.Add("standard", typeof(DoorEditorVisual));
+            doorTypes.Add("standard", typeof(StandardDoorEditorVisual));
             doorTypes.Add("swing", typeof(SwingEditorVisual));
             doorTypes.Add("autodoor", typeof(AutoDoorEditorVisual));
             doorTypes.Add("swingsilent", typeof(SilentSwingEditorVisual));
