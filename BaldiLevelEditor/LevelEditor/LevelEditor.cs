@@ -186,7 +186,7 @@ namespace BaldiLevelEditor
 
             myCamera?.UpdateTargets(myPawn, 30);
 
-            Singleton<MusicManager>.Instance.PlayMidi(BaldiLevelEditorPlugin.editorThemes[UnityEngine.Random.Range(0, 9)], true);
+            Singleton<MusicManager>.Instance.PlayMidi(BaldiLevelEditorPlugin.editorThemes[UnityEngine.Random.Range(0, 15)], true);
             Singleton<MusicManager>.Instance.MidiPlayer.MPTK_Loop = false;
 
             /*level.areas.Add(new AreaData(new ByteVector2(0, 0), new ByteVector2(3, 12), 1));
@@ -1146,7 +1146,7 @@ namespace BaldiLevelEditor
         {
             if (!Singleton<MusicManager>.Instance.MidiPlayer.MPTK_IsPlaying)
             {
-                Singleton<MusicManager>.Instance.PlayMidi(BaldiLevelEditorPlugin.editorThemes[UnityEngine.Random.Range(0, 9)], true);
+                Singleton<MusicManager>.Instance.PlayMidi(BaldiLevelEditorPlugin.editorThemes[UnityEngine.Random.Range(0, 16)], true);
                 Singleton<MusicManager>.Instance.MidiPlayer.MPTK_Loop = false;
             }
 

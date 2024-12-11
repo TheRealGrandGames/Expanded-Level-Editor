@@ -46,10 +46,10 @@ namespace PlusLevelFormat
             {
                 writer.Write(level.windows[i]);
             }
-            writer.Write(level.elevators.Count);
-            for (int i = 0; i < level.elevators.Count; i++)
+            writer.Write(level.exits.Count);
+            for (int i = 0; i < level.exits.Count; i++)
             {
-                writer.Write(level.elevators[i]);
+                writer.Write(level.exits[i]);
             }
             writer.Write(level.npcSpawns.Count);
             for (int i = 0; i < level.npcSpawns.Count; i++)
@@ -96,6 +96,29 @@ namespace PlusLevelFormat
             {
                 writer.Write(level.tiledPrefabs[i]);
             }
+            // write structures
+            writer.Write(level.structures.Count);
+            for (int i = 0; i < level.structures.Count; i++)
+            {
+                writer.Write(level.structures[i]);
+            }
+            // write posters
+            writer.Write(level.posters.Count);
+            for (int i = 0; i < level.posters.Count; i++)
+            {
+                writer.Write(level.posters[i]);
+            }
+            // write lights
+            writer.Write(level.minLightColor.r);
+            writer.Write(level.minLightColor.g);
+            writer.Write(level.minLightColor.b);
+            writer.Write(level.minLightColor.a);
+            writer.Write((byte)level.lightMode);
+            writer.Write(level.lights.Count);
+            for (int i = 0; i < level.lights.Count; i++)
+            {
+                writer.Write(level.lights[i]);
+            }
         }
 
         public static Level ReadLevel(this BinaryReader reader)
@@ -129,7 +152,7 @@ namespace PlusLevelFormat
             int elevatorCount = reader.ReadInt32();
             for (int i = 0; i < elevatorCount; i++)
             {
-                newLevel.elevators.Add(reader.ReadElevator());
+                newLevel.exits.Add(reader.ReadExit(version));
             }
             int npcCount = reader.ReadInt32();
             for (int i = 0; i < npcCount; i++)
@@ -140,7 +163,7 @@ namespace PlusLevelFormat
             int buttonCount = reader.ReadInt32();
             for (int i = 0; i < buttonCount; i++)
             {
-                newLevel.buttons.Add(reader.ReadButton());
+                newLevel.buttons.Add(reader.ReadButton(version));
             }
             if (version <= 1) return newLevel;
             bool[] entitySafe = reader.ReadBoolArray();
@@ -174,14 +197,39 @@ namespace PlusLevelFormat
             {
                 newLevel.tiledPrefabs.Add(reader.ReadTiledPrefab());
             }
+            if (version >= 8)
+            {
+                int structureCount = reader.ReadInt32();
+                for (int i = 0; i < structureCount; i++)
+                {
+                    newLevel.structures.Add(reader.ReadStructure());
+                }
+            }
+            if (version <= 4) return newLevel;
+            int posterCount = reader.ReadInt32();
+            for (int i = 0; i < posterCount; i++)
+            {
+                newLevel.posters.Add(reader.ReadPoster());
+            }
+            if (version <= 6) return newLevel;
+            newLevel.minLightColor.r = reader.ReadSingle();
+            newLevel.minLightColor.g = reader.ReadSingle();
+            newLevel.minLightColor.b = reader.ReadSingle();
+            newLevel.minLightColor.a = reader.ReadSingle();
+            newLevel.lightMode = (BaldiLightMode)reader.ReadByte();
+            int lightCount = reader.ReadInt32();
+            for (int i = 0; i < lightCount; i++)
+            {
+                newLevel.lights.Add(reader.ReadLight());
+            }
             return newLevel;
         }
     }
 
     public class Level
     {
-        public const byte version = 4;
-        public Tile[,] tiles = new Tile[1,1];
+        public const byte version = 8;
+        public Tile[,] tiles = new Tile[1, 1];
         public bool[,] entitySafeTiles = new bool[1, 1];
         public bool[,] eventSafeTiles = new bool[1, 1];
         public bool[,] blockedWalls = new bool[1, 1];
@@ -191,9 +239,15 @@ namespace PlusLevelFormat
         public List<TiledPrefab> tiledPrefabs = new List<TiledPrefab>();
         public List<DoorLocation> doors = new List<DoorLocation>();
         public List<WindowLocation> windows = new List<WindowLocation>();
-        public List<ElevatorLocation> elevators = new List<ElevatorLocation>();
+        public List<ExitLocation> exits = new List<ExitLocation>();
         public List<NPCLocation> npcSpawns = new List<NPCLocation>();
         public List<ButtonLocation> buttons = new List<ButtonLocation>();
+        public List<PosterLocation> posters = new List<PosterLocation>();
+        public List<LightLocation> lights = new List<LightLocation>();
+        public List<StructureLocation> structures = new List<StructureLocation>();
+
+        public BaldiLightMode lightMode = BaldiLightMode.Cumulative;
+        public UnityColor minLightColor = new UnityColor(1f, 1f, 1f);
 
         protected Dictionary<ushort, ushort> _oldToNew = new Dictionary<ushort, ushort>(); //only here so RemoveRoom's local variable can be passed to whatever overrides it
 
@@ -217,15 +271,15 @@ namespace PlusLevelFormat
             Dictionary<RoomProperties, ushort> oldRoomIds = new Dictionary<RoomProperties, ushort>();
             Dictionary<RoomProperties, ushort> newRoomIds = new Dictionary<RoomProperties, ushort>();
             _oldToNew.Clear();
-            rooms.ForEach(room =>
+            rooms.ForEach(rm =>
             {
-                oldRoomIds.Add(room, (ushort)(rooms.IndexOf(room) + 1)); //roomIds start at 1, as 0 is reserved for no room/empty tile
+                oldRoomIds.Add(rm, (ushort)(rooms.IndexOf(rm) + 1)); //roomIds start at 1, as 0 is reserved for no room/empty tile
             });
             ushort roomId = (ushort)(rooms.IndexOf(room) + 1);
             rooms.Remove(room);
-            rooms.ForEach(room =>
+            rooms.ForEach(rm =>
             {
-                newRoomIds.Add(room, (ushort)(rooms.IndexOf(room) + 1));
+                newRoomIds.Add(rm, (ushort)(rooms.IndexOf(rm) + 1));
             });
             foreach (KeyValuePair<RoomProperties, ushort> kvp in oldRoomIds)
             {
@@ -273,7 +327,7 @@ namespace PlusLevelFormat
             {
                 for (int y = 0; y < height; y++)
                 {
-                    tiles[x, y] = new Tile(new ByteVector2(x,y));
+                    tiles[x, y] = new Tile(new ByteVector2(x, y));
                     entitySafeTiles[x, y] = false;
                     eventSafeTiles[x, y] = false;
                     blockedWalls[x, y] = false;
@@ -281,7 +335,12 @@ namespace PlusLevelFormat
             }
         }
     }
-
+    public enum BaldiLightMode : byte
+    {
+        Additive,
+        Greatest,
+        Cumulative
+    }
     public class Tile
     {
 
@@ -314,11 +373,6 @@ namespace PlusLevelFormat
         {
             _x = (byte)x;
             _y = (byte)y;
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(_x, _y);
         }
 
         public static ByteVector2 one => new ByteVector2(1, 1);

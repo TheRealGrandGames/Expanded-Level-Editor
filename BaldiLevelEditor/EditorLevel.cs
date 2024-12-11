@@ -229,6 +229,10 @@ namespace BaldiLevelEditor
                 }
                 level.editorButtons.Add(placement);
             }
+
+            level.editorButtons.Clear();
+            level.buttons.Clear();
+            level.tiledPrefabs.RemoveAll(x => x.type == "lockdowndoor");
             return level;
         }
 

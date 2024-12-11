@@ -19,7 +19,7 @@ using UnityEngine.Experimental.AI;
 namespace PlusLevelLoader
 {
 
-    [BepInPlugin("mtm101.rulerp.baldiplus.levelloader", "Baldi's Basics Plus Level Loader", "0.1.0.0")]
+    [BepInPlugin("mtm101.rulerp.baldiplus.levelloader", "Baldi's Basics Plus Level Loader", "0.1.0.2")]
     public class PlusLevelLoaderPlugin : BaseUnityPlugin
     {
         public static PlusLevelLoaderPlugin Instance;
@@ -295,7 +295,7 @@ namespace PlusLevelLoader
             prefabAliases.Add("johnnysign", objects.Where(x => x.name == "JohnnySign").Where(x => x.transform.parent == null).First());
             prefabAliases.Add("campfire", objects.Where(x => x.name == "CampFire").Where(x => x.transform.parent == null).First());
 
-            prefabAliases.Add("shrinkmachine", objects.Where(x => x.name == "ShrinkMachine").Where(x => x.transform.parent == null).First());
+            //prefabAliases.Add("shrinkmachine", objects.Where(x => x.name == "ShrinkMachine").Where(x => x.transform.parent == null).First());
 
             price_map = objects.Where(x => x.name == "PriceTag_1").Where(x => x.transform.parent.name == "RoomBase").First();
             prefabAliases.Add("pricetagmap", price_map);

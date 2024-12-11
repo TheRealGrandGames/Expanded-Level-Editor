@@ -65,7 +65,7 @@ namespace BaldiLevelEditor
         }
     }
 
-    [BepInPlugin("mtm101.rulerp.baldiplus.leveleditor", "Baldi's Basics Plus Level Editor", "0.1.0.0")]
+    [BepInPlugin("mtm101.rulerp.baldiplus.leveleditor", "Baldi's Basics Plus Level Editor", "0.1.0.2")]
     [BepInDependency("mtm101.rulerp.baldiplus.texturepacks", BepInDependency.DependencyFlags.SoftDependency)]
     public class BaldiLevelEditorPlugin : BaseUnityPlugin
     {
@@ -110,7 +110,7 @@ namespace BaldiLevelEditor
         public static Texture2D lightmapTexture => lightmaps["lighting"];
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 
-        public static string[] editorThemes = new string[9];
+        public static string[] editorThemes = new string[16];
         public static SoundObject[] fileEditorThemes = new SoundObject[1];
 
         Sprite platterSprite;
@@ -413,6 +413,13 @@ namespace BaldiLevelEditor
             editorThemes[6] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorG.mid"), "editorG");
             editorThemes[7] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorH.mid"), "editorH");
             editorThemes[8] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorI.mid"), "editorI");
+            editorThemes[9] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorJ.mid"), "editorJ");
+            editorThemes[10] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorK.mid"), "editorK");
+            editorThemes[11] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorL.mid"), "editorL");
+            editorThemes[12] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorM.mid"), "editorM");
+            editorThemes[13] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorN.mid"), "editorN");
+            editorThemes[14] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorO.mid"), "editorO");
+            editorThemes[15] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorP.mid"), "editorP");
             //editorThemes[8] = AssetLoader.MidiFromFile(Path.Combine(AssetLoader.GetModPath(this), "EditorI.mid"), "editorI");
 
             //NEW; Adds a new Sprite lol
@@ -549,7 +556,7 @@ namespace BaldiLevelEditor
             editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("balloon_orange", objects.Where(x => x.name == "Balloon_Orange").Where(x => x.transform.parent == null).First(), Vector3.up * 5f));
             editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("balloon_purple", objects.Where(x => x.name == "Balloon_Purple").Where(x => x.transform.parent == null).First(), Vector3.up * 5f));
 
-            editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("shrinkmachine", objects.Where(x => x.name == "ShrinkMachine").Where(x => x.transform.parent == null).First(), Vector3.zero));
+            //editorObjects.Add(EditorObjectType.CreateFromGameObject<EditorPrefab, PrefabLocation>("shrinkmachine", objects.Where(x => x.name == "ShrinkMachine").Where(x => x.transform.parent == null).First(), Vector3.zero));
             
             //TiledEditorConnectable conveyorVisual = CreateTileVisualFromObject<TiledEditorConnectable, TiledPrefab>(objects.Where(x => x.name == "BeltManager").First());
             //conveyorVisual.positionOffset = Vector3.up * 21f;

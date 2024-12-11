@@ -73,14 +73,23 @@ namespace PlusLevelFormat
         }
     }
 
+    public class LightLocation
+    {
+        public string type = "fluorescent";
+        public ByteVector2 position;
+        public UnityColor color;
+        public byte strength;
+    }
+
     public class ItemLocation : IEditorLocation
     {
         public string item = "null";
         public UnityVector3 position { get; set; }
     }
 
-    public class ElevatorLocation
+    public class ExitLocation
     {
+        public string type = "elevator";
         public ByteVector2 position;
         public PlusDirection direction;
         public bool isSpawn = false;
@@ -98,6 +107,17 @@ namespace PlusLevelFormat
         public string type = "null";
         public ByteVector2 position;
         public PlusDirection direction = PlusDirection.Null;
+    }
+
+    public class StructureLocation : TiledPrefab
+    {
+        public int data;
+        public string prefab;
+    }
+
+    public class PosterLocation : TiledPrefab
+    {
+
     }
 
     public class WindowLocation : TiledPrefab
@@ -132,7 +152,7 @@ namespace PlusLevelFormat
         public int index;
         public PlusReceiverType type;
 
-        public static ConnectionData? FromPrefab(Level level, PrefabLocation location)
+        public static ConnectionData FromPrefab(Level level, PrefabLocation location)
         {
             int roomId = level.rooms.FindIndex(x => x.prefabs.Contains(location));
             if (roomId == -1) return null;
@@ -146,7 +166,7 @@ namespace PlusLevelFormat
             };
         }
 
-        public static ConnectionData? FromTileBased(Level level, TiledPrefab location)
+        public static ConnectionData FromTileBased(Level level, TiledPrefab location)
         {
             int index = level.tiledPrefabs.IndexOf(location);
             if (index == -1) return null;
@@ -168,12 +188,12 @@ namespace PlusLevelFormat
 
     public interface IEditorLocation
     {
-        public UnityVector3 position { get; set; }
+        UnityVector3 position { get; set; }
     }
 
     public class RoomProperties
     {
-        public RoomActivity? activity;
+        public RoomActivity activity;
         public string type = "null";
         public TextureContainer textures = new TextureContainer();
         public List<PrefabLocation> prefabs = new List<PrefabLocation>();

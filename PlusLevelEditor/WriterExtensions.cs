@@ -15,6 +15,13 @@ namespace PlusLevelFormat
             writer.Write((byte)prefab.direction);
         }
 
+        public static void Write(this BinaryWriter writer, PosterLocation prefab)
+        {
+            writer.Write(prefab.type);
+            writer.Write(prefab.position);
+            writer.Write((byte)prefab.direction);
+        }
+
         public static TiledPrefab ReadTiledPrefab(this BinaryReader reader)
         {
             TiledPrefab newPf = new TiledPrefab();
@@ -24,9 +31,17 @@ namespace PlusLevelFormat
             return newPf;
         }
 
+        public static PosterLocation ReadPoster(this BinaryReader reader)
+        {
+            PosterLocation newPf = new PosterLocation();
+            newPf.type = reader.ReadString();
+            newPf.position = reader.ReadByteVector2();
+            newPf.direction = (PlusDirection)reader.ReadByte();
+            return newPf;
+        }
+
         public static void Write(this BinaryWriter writer, ButtonLocation button)
         {
-            writer.Write(button.type);
             writer.Write(button.position);
             writer.Write((byte)button.direction);
             writer.Write(button.connections.Count);
@@ -36,10 +51,31 @@ namespace PlusLevelFormat
             }
         }
 
-        public static ButtonLocation ReadButton(this BinaryReader reader)
+        public static void Write(this BinaryWriter writer, StructureLocation location)
+        {
+            writer.Write((TiledPrefab)location);
+            writer.Write(location.data);
+            writer.Write(location.prefab);
+        }
+
+        public static StructureLocation ReadStructure(this BinaryReader reader)
+        {
+            StructureLocation loc = new StructureLocation();
+            loc.type = reader.ReadString();
+            loc.position = reader.ReadByteVector2();
+            loc.direction = (PlusDirection)reader.ReadByte();
+            loc.data = reader.ReadInt32();
+            loc.prefab = reader.ReadString();
+            return loc;
+        }
+
+        public static ButtonLocation ReadButton(this BinaryReader reader, byte version)
         {
             ButtonLocation button = new ButtonLocation();
-            button.type = reader.ReadString();
+            if (version < 8)
+            {
+                button.type = reader.ReadString();
+            }
             button.position = reader.ReadByteVector2();
             button.direction = (PlusDirection)reader.ReadByte();
             int count = reader.ReadInt32();
@@ -95,7 +131,7 @@ namespace PlusLevelFormat
             }
         }
 
-        public static void WriteActivity(this BinaryWriter writer, RoomActivity? activity)
+        public static void WriteActivity(this BinaryWriter writer, RoomActivity activity)
         {
             if (activity == null)
             {
@@ -114,7 +150,7 @@ namespace PlusLevelFormat
             writer.Write((byte)activity.direction);
         }
 
-        public static RoomActivity? ReadActivity(this BinaryReader reader)
+        public static RoomActivity ReadActivity(this BinaryReader reader)
         {
             string type = reader.ReadString();
             if (type == "null") return null;
@@ -125,20 +161,50 @@ namespace PlusLevelFormat
             return activity;
         }
 
-        public static void Write(this BinaryWriter writer, ElevatorLocation elevator)
+        public static void Write(this BinaryWriter writer, ExitLocation elevator)
         {
+            writer.Write(elevator.type);
             writer.Write(elevator.position);
             writer.Write((byte)elevator.direction);
             writer.Write(elevator.isSpawn);
         }
 
-        public static ElevatorLocation ReadElevator(this BinaryReader reader)
+        public static ExitLocation ReadExit(this BinaryReader reader, int version)
         {
-            ElevatorLocation elevator = new ElevatorLocation();
+            ExitLocation elevator = new ExitLocation();
+            if (version <= 5)
+            {
+                elevator.type = "elevator";
+            }
+            else
+            {
+                elevator.type = reader.ReadString();
+            }
             elevator.position = reader.ReadByteVector2();
             elevator.direction = (PlusDirection)reader.ReadByte();
             elevator.isSpawn = reader.ReadBoolean();
             return elevator;
+        }
+
+        public static void Write(this BinaryWriter writer, LightLocation light)
+        {
+            writer.Write(light.type);
+            writer.Write(light.position);
+            writer.Write(light.color.r);
+            writer.Write(light.color.g);
+            writer.Write(light.color.b);
+            writer.Write(light.color.a);
+            writer.Write(light.strength);
+        }
+
+        public static LightLocation ReadLight(this BinaryReader reader)
+        {
+            LightLocation newL = new LightLocation();
+            newL.type = reader.ReadString();
+            newL.position = reader.ReadByteVector2();
+            newL.color = new UnityColor(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
+            newL.strength = reader.ReadByte();
+            return newL;
         }
 
         public static RoomProperties ReadRoom(this BinaryReader reader)
@@ -297,11 +363,11 @@ namespace PlusLevelFormat
         public static void Write(this BinaryWriter writer, bool[] flags)
         {
             writer.Write(flags.Length);
-            for (int i = 0; i < flags.Length; i+=8)
+            for (int i = 0; i < flags.Length; i += 8)
             {
                 bool[] bytes = new bool[8];
                 int z = 0;
-                for (int y = i; y < i+8; y++)
+                for (int y = i; y < i + 8; y++)
                 {
                     if (y >= flags.Length)
                     {
